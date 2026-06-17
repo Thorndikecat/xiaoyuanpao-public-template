@@ -1,123 +1,145 @@
-# MuMu Route GPS Template
+# MuMu 模拟定位轨迹模板
 
-Windows PowerShell tools for playing a GPS route into MuMu Android Emulator through ADB. The repository is a public-safe template: it contains no real routes, APKs, account data, proxy subscriptions, emulator IDs, or log files.
+这是一个用于 MuMu 安卓模拟器的 GPS 轨迹播放模板。脚本在 Windows PowerShell 中运行，通过 MuMu 自带 ADB 向安卓系统持续写入模拟定位点。
 
-Use this only for development, map testing, QA, demos, or accounts and apps you are authorized to test.
+这个仓库是公开安全版本：不包含真实路线、APK、账号信息、代理订阅、模拟器设备标识、日志文件或历史敏感提交。
 
-## What Is Included
+请仅用于开发测试、地图调试、质量验证、演示，或你有权限控制的账号和应用场景。
 
-- `mumu-route-gps.ps1`: main route playback script.
-- `run-example-route-6km.ps1`: example 6 km loop runner.
-- `pause-mumu-route.ps1` and `resume-mumu-route.ps1`: pause/resume controls.
-- `mumu-use-pc-proxy.ps1` and `mumu-clear-proxy.ps1`: optional Android system proxy helpers.
-- `routes/example-route.csv` and `routes/example-route.gpx`: demo coordinates only.
+## 仓库内容
 
-## What Is Not Included
+- `mumu-route-gps.ps1`：主轨迹播放脚本。
+- `run-example-route-6km.ps1`：示例 6 公里循环脚本。
+- `pause-mumu-route.ps1` / `resume-mumu-route.ps1`：暂停和继续当前轨迹。
+- `mumu-use-pc-proxy.ps1` / `mumu-clear-proxy.ps1`：可选的安卓系统代理开关脚本。
+- `routes/example-route.csv` / `routes/example-route.gpx`：演示路线坐标。
+- `docs/security.md`：公开仓库安全注意事项。
 
-Do not commit these files to a public repo:
+## 不应上传的内容
 
-- Real route CSV/GPX files.
-- APKs, installers, or app packages.
-- MuMu VM files, especially `vm_config.json`.
-- Proxy subscriptions, Clash profiles, node URLs, tokens, cookies, or credentials.
-- Logcat logs, screenshots, or recordings that include accounts, schools, routes, or location history.
-- Keystores, certificates, and private keys.
+不要把下面这些内容提交到公开仓库：
 
-The `.gitignore` is configured to keep common sensitive files out of the repo.
+- 真实路线 CSV / GPX。
+- APK、安装包、应用备份。
+- MuMu 虚拟机配置，尤其是 `vm_config.json`。
+- 代理订阅、Clash 配置、节点 URL、token、cookie、账号密码。
+- logcat 日志、截图、录屏，尤其是包含账号、学校、路线或定位历史的文件。
+- 签名证书、keystore、私钥。
 
-## MuMu Configuration
+仓库里的 `.gitignore` 已经排除了常见敏感文件，但不要只依赖 `.gitignore`。提交前仍应检查 `git status` 和即将提交的文件列表。
 
-Required MuMu settings:
+## MuMu 配置
 
-1. Start MuMu and wait until Android is fully booted.
-2. Open MuMu device settings.
-3. Enable developer options.
-4. Enable ADB debugging / local ADB connection.
-5. Confirm the ADB serial. The default used by these scripts is:
+运行脚本前需要完成这些设置：
+
+1. 启动 MuMu，等待安卓桌面完全进入。
+2. 打开 MuMu 设备设置。
+3. 开启开发者选项。
+4. 开启 ADB 调试 / 本地 ADB 连接。
+5. 确认 ADB 连接端口。
+
+脚本默认使用的 ADB 设备地址是：
 
 ```text
 127.0.0.1:16384
 ```
 
-If your MuMu instance uses another ADB port, pass it explicitly:
+如果你的 MuMu 实例使用其他端口，运行时显式传入：
 
 ```powershell
-.\mumu-route-gps.ps1 -Serial 127.0.0.1:<PORT>
+.\mumu-route-gps.ps1 -Serial 127.0.0.1:<端口>
 ```
 
-You can usually find the MuMu ADB port in the local MuMu `vm_config.json`, but do not commit that file because it may contain local device identifiers and emulator configuration.
+通常可以在本机 MuMu 的 `vm_config.json` 中查看 ADB 端口，但不要把这个文件上传到公开仓库，因为它可能包含本机路径、设备标识和模拟器配置。
 
-The default MuMu ADB executable path is:
+脚本默认的 MuMu ADB 路径是：
 
 ```text
 D:\Program Files\Netease\MuMu\nx_device\12.0\shell\adb.exe
 ```
 
-If your installation path is different, pass `-AdbPath`.
+如果你的安装路径不同，运行时传入 `-AdbPath`。
 
-Root is not required for route playback. Writable system disk is not required for route playback. They may be useful for unrelated Android system modifications, but this template does not depend on them.
+轨迹播放不需要 Root，也不需要可写系统盘。Root 或可写系统盘只和其他安卓系统改动有关，本模板不依赖它们。
 
-## Optional Proxy Configuration
+## 检查 ADB 连接
 
-In Android emulators, `10.0.2.2` means the Windows host machine. If your PC proxy listens on port `7897`, this command sets Android's system proxy to `10.0.2.2:7897`:
+```powershell
+& "D:\Program Files\Netease\MuMu\nx_device\12.0\shell\adb.exe" connect 127.0.0.1:16384
+& "D:\Program Files\Netease\MuMu\nx_device\12.0\shell\adb.exe" devices
+```
+
+正常情况下应看到：
+
+```text
+127.0.0.1:16384    device
+```
+
+如果设备没有出现，先确认 MuMu 安卓桌面已启动，并检查 MuMu 设置里的 ADB 本地连接是否开启。
+
+## 可选代理配置
+
+在安卓模拟器中，`10.0.2.2` 表示宿主 Windows 电脑。
+
+如果电脑代理监听 `7897` 端口，可以把安卓系统代理设置为 `10.0.2.2:7897`：
 
 ```powershell
 .\mumu-use-pc-proxy.ps1
 ```
 
-Clear the Android proxy:
+清除安卓系统代理：
 
 ```powershell
 .\mumu-clear-proxy.ps1
 ```
 
-Check current Android proxy:
+查看当前安卓代理：
 
 ```powershell
 & "D:\Program Files\Netease\MuMu\nx_device\12.0\shell\adb.exe" -s 127.0.0.1:16384 shell settings get global http_proxy
 ```
 
-Some Android apps ignore the system proxy. For those apps, use the emulator without proxy for domestic services, or use a proper TUN/transparent proxy setup on the host.
+部分安卓应用不会遵守系统代理。对于国内服务，通常建议关闭模拟器代理；对于必须走代理的服务，可以使用宿主机 TUN / 透明代理方案。
 
-## Run The Example Route
+## 运行示例路线
 
-Open PowerShell in this repository:
+在 PowerShell 中进入仓库目录：
 
 ```powershell
-cd <repo>
+cd <仓库目录>
 .\run-example-route-6km.ps1
 ```
 
-The example runner:
+示例脚本行为：
 
-- Uses `routes/example-route.csv`.
-- Sends updates every 1 second.
-- Randomizes speed per segment.
-- Targets an average pace of about 6.5 min/km.
-- Loops until total distance reaches 6 km.
-- Writes both `gps` and `network` mock providers.
+- 使用 `routes/example-route.csv`。
+- 每 1 秒写入一次定位点。
+- 每段随机速度。
+- 目标平均配速约为 `6.5 分/公里`。
+- 路线循环，累计到 6 公里后自动停止。
+- 同时写入 `gps` 和 `network` 两个模拟定位 provider。
 
-Stop manually:
+手动停止：
 
 ```text
 Ctrl+C
 ```
 
-Pause:
+暂停：
 
 ```powershell
 .\pause-mumu-route.ps1
 ```
 
-Resume:
+继续：
 
 ```powershell
 .\resume-mumu-route.ps1
 ```
 
-## Custom Routes
+## 自定义路线
 
-CSV format:
+CSV 格式：
 
 ```csv
 lat,lon,speed_kmh
@@ -126,33 +148,51 @@ lat,lon,speed_kmh
 31.231180,121.473640,8
 ```
 
-`lat` is latitude. `lon` is longitude. `speed_kmh` is optional unless `-RandomSpeed` is not used.
+字段说明：
 
-Run a custom route:
+- `lat`：纬度。
+- `lon`：经度。
+- `speed_kmh`：从当前点到下一个点的速度，单位为公里/小时。使用 `-RandomSpeed` 时可不依赖这个字段。
+
+运行自定义路线：
 
 ```powershell
-.\mumu-route-gps.ps1 -Route .\routes\private\my-route.csv -RandomSpeed -TargetPaceMinKm 6.5 -MaxDistanceKm 6 -Provider "gps", "network" -KeepProvider
+.\mumu-route-gps.ps1 `
+    -Route .\routes\private\my-route.csv `
+    -RandomSpeed `
+    -TargetPaceMinKm 6.5 `
+    -MaxDistanceKm 6 `
+    -Provider "gps", "network" `
+    -KeepProvider
 ```
 
-Keep real routes in `routes/private/`; it is ignored by Git.
+真实路线建议放在：
 
-## Coordinate Systems
+```text
+routes/private/
+```
 
-Android location APIs expect WGS84 coordinates.
+这个目录已被 `.gitignore` 忽略，不会被提交到公开仓库。
 
-Common map providers may use other coordinate systems:
+## 坐标系
 
-- Baidu Maps: usually BD-09.
-- Amap/Gaode: usually GCJ-02.
-- Android GPS/mock location: WGS84.
+安卓定位接口期望 WGS84 坐标。
 
-Convert coordinates before playing them into Android, otherwise the route may appear shifted by hundreds of meters.
+常见地图坐标系：
 
-## Speed Model
+- 百度地图：通常是 BD-09。
+- 高德地图：通常是 GCJ-02。
+- 安卓 GPS / mock location：WGS84。
 
-With `-RandomSpeed`, each route segment gets a randomized pace. When `-TargetPaceMinKm` is set, the script applies a small correction based on the average pace generated so far.
+如果直接把百度或高德坐标写入安卓定位，路线可能整体偏移几十到几百米。应先转换成 WGS84。
 
-Example:
+## 速度模型
+
+使用 `-RandomSpeed` 时，脚本会为路线中的每一段随机生成配速。
+
+如果设置了 `-TargetPaceMinKm`，脚本会根据前面已经生成的平均配速做轻微纠偏，让整体平均更接近目标值。
+
+示例：
 
 ```powershell
 -RandomSpeed `
@@ -162,4 +202,19 @@ Example:
 -MaxPaceMinKm 9
 ```
 
-This keeps each segment random while pulling the overall average toward about 6.5 min/km.
+含义：
+
+- 单段配速在 `4-9 分/公里` 内浮动。
+- 每段速度随机。
+- 整体平均尽量靠近 `6.5 分/公里`。
+
+## 发布前检查
+
+公开发布前建议执行：
+
+```powershell
+git status --short --ignored
+git diff --cached --name-only
+```
+
+确认没有真实路线、APK、日志、截图、账号信息、代理配置或 MuMu 本地配置文件进入提交。

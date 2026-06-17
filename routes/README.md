@@ -1,7 +1,15 @@
-# Route Files
+# 路线文件
 
-This directory intentionally contains only demo coordinates.
+这个目录只放演示坐标。
 
-Do not commit real campus routes, personal locations, screenshots, exported logs, or account-specific route data. Keep private routes under `routes/private/`; that directory is ignored by Git.
+不要提交真实校园路线、个人位置、截图、导出日志或账号相关路线数据。
 
-Android mock location expects WGS84 coordinates. Coordinates copied from Baidu Maps are usually BD-09 and must be converted before use.
+真实路线建议放在：
+
+```text
+routes/private/
+```
+
+该目录已被 `.gitignore` 忽略。
+
+安卓模拟定位应使用 WGS84 坐标。从百度地图复制的坐标通常是 BD-09，从高德地图复制的坐标通常是 GCJ-02，使用前需要转换。

@@ -1,12 +1,14 @@
-# Public Repository Safety
+# 公开仓库安全说明
 
-Do not upload:
+不要上传：
 
-- Real route CSV/GPX files.
-- APK files or app installers.
-- MuMu VM configuration such as `vm_config.json`.
-- Proxy subscriptions, Clash profiles, node URLs, tokens, cookies, or account credentials.
-- Logcat files, screenshots, or screen recordings that include accounts, school names, routes, or location history.
-- Signing keys, keystores, certificates, or private keys.
+- 真实路线 CSV / GPX 文件。
+- APK 文件或安装包。
+- MuMu 虚拟机配置，例如 `vm_config.json`。
+- 代理订阅、Clash 配置、节点 URL、token、cookie、账号凭据。
+- logcat 日志、截图、录屏，尤其是包含账号、学校、路线或定位历史的内容。
+- 签名密钥、keystore、证书或私钥。
 
-This template is designed to be safe for a public repository by shipping only generic scripts and demo coordinates.
+这个模板仓库只应包含通用脚本、示例路线和说明文档。
+
+如果误提交了敏感文件，仅在最新提交中删除不等于彻底清理。公开仓库的历史记录仍可能保留这些内容。需要重写 Git 历史并强制推送，必要时还要轮换泄露的凭据。
