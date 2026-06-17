@@ -1,0 +1,5 @@
+order,lat,lon,name,note
+1,31.230400,121.473700,start,replace with your WGS84 point
+2,31.230780,121.474180,checkpoint-1,replace with your WGS84 point
+3,31.231180,121.473640,checkpoint-2,replace with your WGS84 point
+4,31.230400,121.473700,end,close the loop if needed

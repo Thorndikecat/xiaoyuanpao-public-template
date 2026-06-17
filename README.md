@@ -13,6 +13,8 @@
 - `pause-mumu-route.ps1` / `resume-mumu-route.ps1`：暂停和继续当前轨迹。
 - `mumu-use-pc-proxy.ps1` / `mumu-clear-proxy.ps1`：可选的安卓系统代理开关脚本。
 - `routes/example-route.csv` / `routes/example-route.gpx`：演示路线坐标。
+- `routes/route-template.csv`：路线设计模板，用户复制后填入自己的路径点。
+- `docs/route-template.md`：路线模板填写说明。
 - `docs/security.md`：公开仓库安全注意事项。
 
 ## 不应上传的内容
@@ -139,20 +141,38 @@ Ctrl+C
 
 ## 自定义路线
 
-CSV 格式：
+可以直接让用户填真实路径点。推荐流程：
+
+1. 复制模板：
+
+```powershell
+New-Item -ItemType Directory -Force .\routes\private
+Copy-Item .\routes\route-template.csv .\routes\private\my-route.csv
+```
+
+2. 编辑 `routes/private/my-route.csv`，按顺序填入真实点位。
+3. 确认坐标已经转换为 WGS84。
+4. 运行该路线。
+
+模板格式：
 
 ```csv
-lat,lon,speed_kmh
-31.230400,121.473700,9
-31.230780,121.474180,10
-31.231180,121.473640,8
+order,lat,lon,name,note
+1,31.230400,121.473700,start,replace with your WGS84 point
+2,31.230780,121.474180,checkpoint-1,replace with your WGS84 point
+3,31.231180,121.473640,checkpoint-2,replace with your WGS84 point
+4,31.230400,121.473700,end,close the loop if needed
 ```
 
 字段说明：
 
+- `order`：路径点顺序。
 - `lat`：纬度。
 - `lon`：经度。
-- `speed_kmh`：从当前点到下一个点的速度，单位为公里/小时。使用 `-RandomSpeed` 时可不依赖这个字段。
+- `name`：点位名称，可选。
+- `note`：备注，可选。
+
+实际播放脚本只需要 `lat` 和 `lon`。其他字段方便人工维护路线。
 
 运行自定义路线：
 
@@ -173,6 +193,8 @@ routes/private/
 ```
 
 这个目录已被 `.gitignore` 忽略，不会被提交到公开仓库。
+
+如果路线不是闭环，脚本循环时会从最后一个点直接回到第一个点。需要闭环时，把起点再填为最后一个点。
 
 ## 坐标系
 
