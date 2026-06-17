@@ -1,0 +1,11 @@
+& "$PSScriptRoot\mumu-route-gps.ps1" `
+    -Route "$PSScriptRoot\routes\example-route.csv" `
+    -IntervalSeconds 1 `
+    -MaxDistanceKm 6 `
+    -RandomSpeed `
+    -TargetPaceMinKm 6.5 `
+    -PaceJitterMinKm 2.5 `
+    -MinPaceMinKm 4 `
+    -MaxPaceMinKm 9 `
+    -Provider "gps", "network" `
+    -KeepProvider

@@ -1,0 +1,41 @@
+*.apk
+*.exe
+*.log
+*.tmp
+*.pause
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+*.mobileconfig
+
+# Local-only routes and exports. Keep real coordinates out of public repos.
+routes/private/
+routes/*private*
+routes/*real*
+routes/*actual*
+routes/*local*
+routes/*school*
+routes/*campus*
+*-route-wgs84.csv
+*-waypoints-wgs84.csv
+*-waypoints.csv
+
+# MuMu / emulator local state. These may contain device ids, ports, or local paths.
+vm_config.json
+configs/
+vms/
+
+# Proxy and account material.
+*.yaml
+*.yml
+*.json
+*.env
+*.txt
+
+!.gitignore
+!package.json
+!routes/example-route.csv
+!routes/example-route.gpx
+!docs/*.md

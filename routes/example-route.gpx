@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="mumu-route-gps-template" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Example route</name>
+    <trkseg>
+      <trkpt lat="31.230400" lon="121.473700" />
+      <trkpt lat="31.230520" lon="121.473940" />
+      <trkpt lat="31.230780" lon="121.474180" />
+      <trkpt lat="31.231050" lon="121.474010" />
+      <trkpt lat="31.231180" lon="121.473640" />
+      <trkpt lat="31.230850" lon="121.473450" />
+      <trkpt lat="31.230400" lon="121.473700" />
+    </trkseg>
+  </trk>
+</gpx>
